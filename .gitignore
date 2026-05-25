@@ -1,0 +1,40 @@
+# user-provided heavy dirs — ignore contents but keep the placeholder README
+# so the directory ships with the repo (each README explains what to put here).
+data/*
+!data/README.md
+ckpts/*
+!ckpts/README.md
+runs/*
+!runs/README.md
+experiments/
+
+# logs
+*.log
+*.out
+nohup.out
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.mypy_cache/
+.ruff_cache/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# build / dist
+build/
+dist/
+*.egg
+
+# Hugging Face / wandb caches
+.cache/
+wandb/

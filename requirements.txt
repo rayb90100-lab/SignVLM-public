@@ -1,0 +1,35 @@
+# pip install -r requirements.txt
+# torch wheel uses cu121 (driver 535 / CUDA 12.2 cap)
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+transformers>=4.49,<5
+accelerate>=0.30,<2
+qwen-vl-utils>=0.0.8
+pillow
+opencv-python-headless>=4.10
+modelscope>=1.20
+
+peft>=0.10,<1
+# install with `pip install flash-attn --no-build-isolation` (compiles 5-10 min,
+# requires ninja + nvcc); enables ~10-20% activation savings vs sdpa.
+flash-attn>=2.5,<3
+# fused_linear_cross_entropy patch for Qwen2.5-VL — avoids materializing
+# (B, T, vocab=151936) logits tensor; saves ~1-2 GB at LM head; required for
+# 6-card DDP at 800K image pixels.
+liger-kernel>=0.8,<1
+# 8-bit AdamW — saves 2-4 GB optim state; required for option-b (1.6M pixels)
+# on 4090 24G; passed via train_sft.py `--optim adamw8bit`. Also REQUIRED for
+# DPO single-card 512K max_pixels — without it DPO step 2 OOMs.
+bitsandbytes>=0.43,<1
+
+# Stage 2 DPO RFT (W3, 2026-05-12). NOTE: trl 0.23.1 DPOTrainer does NOT support
+# Qwen2.5-VL because process_row drops `image_grid_thw`; scripts/train_dpo.py
+# self-writes the DPO loss and only uses trl for env / type imports + future
+# GRPO fallback. Cap upper at 0.24 to avoid major API breaks in future releases.
+# Also pulls in `datasets` (uncommented below) as transitive dep.
+trl>=0.18,<0.24
+
+# Stage 1+ (uncomment when needed):
+# tensorboard
