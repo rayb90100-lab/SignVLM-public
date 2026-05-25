@@ -1,5 +1,8 @@
 # SignVLM: Vision-Faithful Sign-to-Lane Rule Binding
 
+[![Pretrained adapters on Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-ray90100%2FSignVLM--public-yellow)](https://huggingface.co/ray90100/SignVLM-public/tree/main)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 > Use a Vision-Language Model to read traffic-sign content and bind the parsed
 > rule to specific lanes on the map, so a downstream planner can change lanes
 > correctly — even when the prior map and the camera-observed sign disagree.
@@ -7,6 +10,11 @@
 Qwen2.5-VL-7B + LoRA SFT + **CAVP** (Conflict-Aware Vision-Prior training)
 substantially outperforms zero-shot and the RuleVLM baseline on MapDR Test
 under vision-vs-map conflict — see §4 for the reproduction recipe.
+
+**Pretrained LoRA adapters** for all paper-cited runs (10 adapters, ~23 GB)
+are released on Hugging Face:
+**https://huggingface.co/ray90100/SignVLM-public/tree/main**
+— see §3 "Pretrained adapters" for a one-liner download / load snippet.
 
 ---
 
