@@ -86,6 +86,33 @@ huggingface-cli download Qwen/Qwen2.5-VL-7B-Instruct \
     --local-dir ckpts/Qwen2.5-VL-7B-Instruct
 ```
 
+### Pretrained adapters (skip training)
+
+The LoRA adapters used in the paper are released on Hugging Face at
+[**ray90100/SignVLM-public**](https://huggingface.co/ray90100/SignVLM-public).
+Use them directly if you just want to evaluate / inspect, without
+re-running the SFT / DPO / GRPO training jobs:
+
+```bash
+# Headline adapter — Qwen2.5-VL-7B + LoRA SFT + CAVP, seed 42
+huggingface-cli download ray90100/SignVLM-public \
+    --include "sft-7B-CAVP-p0.3-s42/*" \
+    --local-dir ckpts/
+```
+
+```python
+from peft import PeftModel
+from transformers import Qwen2_5_VLForConditionalGeneration
+
+base = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+    "Qwen/Qwen2.5-VL-7B-Instruct", torch_dtype="bfloat16", device_map="cuda")
+model = PeftModel.from_pretrained(
+    base, "ray90100/SignVLM-public", subfolder="sft-7B-CAVP-p0.3-s42")
+```
+
+See the Hugging Face repo's model card for the full adapter index and
+which subfolder maps to which paper table row.
+
 ## 4. Reproduce the headline result
 
 ### 4.1 Train SFT baseline (clean, no conflict perturbation)
